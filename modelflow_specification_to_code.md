@@ -13,7 +13,7 @@ This chapter follows the translation side of the architecture: the ModelFlow DSL
 The historical development that preceded ModelFlow—MACRO/NASS and PCIM—is described separately in [Historical background](Historic_complete.md).
 
 :::{figure} diagrams/chain.png
-:alt: From external model formats and the ModelFlow DSL, through normalization, validation and token rewriting, to executable Python and the solvers.
+:alt: From model text written directly (Python string or Markdown) or imported from external formats, through the ModelFlow DSL, normalization, graph analysis, validation and token rewriting, to executable Python and the solvers.
 :width: 78%
 :name: fig-chain
 
@@ -467,8 +467,8 @@ The division of labour is:
 | **Higher-level DSL** | Dimensions, repeated structure, sums, tags |
 | **Normalization** | Isolate the endogenous variable; generate equation variants |
 | **Python AST** | Early syntax validation and error localization |
-| **Regex/token rewriting** | Translation of ModelFlow-specific constructs |
 | **Graph analysis** | Solve order of the generated code: prolog, core, epilog and feedback set; see [Model structure and solution](modelflow_structure_and_solution.md) |
+| **Regex/token rewriting** | Translation of ModelFlow-specific constructs |
 | **Python parser/compiler** | General expression grammar and compilation |
 | **`exec`** | Execution of generated model code |
 | **Numba (optional)** | Machine-code compilation of the same generated source |
@@ -569,8 +569,8 @@ The continuation of this example—its graph edge, symbolic derivative and Jacob
 | **Generated model variants** | Add factors, exogenization, reverse and fitted equations |
 | **Equation DSL** | Compact Python-compatible economic equations |
 | **Validation** | Python AST checking against the original equation |
-| **Translation** | Regex and ModelFlow-specific token substitution |
 | **Graph analysis** | Order the normalized equations; sets the order of the generated code |
+| **Translation** | Regex and ModelFlow-specific token substitution |
 | **Python toolchain** | General parsing, compilation and execution |
 | **Numba (optional)** | Machine-code compilation of the generated source |
 | **Runtime diagnostics** | Map execution errors back to the failing economic equation |
