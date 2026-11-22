@@ -8,7 +8,7 @@ The central principle is:
 
 > **Use Python syntax wherever possible, transform only the notation specific to economic modelling, and delegate the general language machinery to Python and its scientific ecosystem.**
 
-This chapter follows the translation side of the architecture: the ModelFlow DSL and imported model formats, dimensional expansion, normalization, tags and generated variants, AST validation, token rewriting, and execution as Python or Numba-compiled code. It also sets out what the DSL deliberately leaves out, because the user interface around the equations is Python itself. The next chapter, [Model structure and solution](modelflow_structure_and_solution.md), starts from the executable equation system and explains graph ordering, Gauss-Seidel and Newton solution. [Local stability and model dynamics](modelflow_stability.md) then uses the derivative machinery for stability analysis.
+This chapter follows the translation side of the architecture: the ModelFlow DSL and imported model formats, dimensional expansion, normalization, tags and generated variants, AST validation, token rewriting, and execution as Python or Numba-compiled code. It also sets out what the DSL deliberately leaves out, because the user interface around the equations is Python itself. The next chapter, [Model structure and solution](modelflow_structure_and_solution.md), explains the graph analysis of the normalized equations, which sets the order in which the executable code is generated, and then Gauss-Seidel and Newton solution. [Local stability and model dynamics](modelflow_stability.md) then uses the derivative machinery for stability analysis.
 
 The historical development that preceded ModelFlow—MACRO/NASS and PCIM—is described separately in [Historical background](Historic_complete.md).
 
@@ -17,7 +17,7 @@ The historical development that preceded ModelFlow—MACRO/NASS and PCIM—is de
 :width: 78%
 :name: fig-chain
 
-The complete chain. This chapter covers specification through executable code; model ordering and solution are treated in the next chapter.
+The complete chain. The graph analysis of the normalized equations comes before the executable code, because it sets the solve order in which the code is generated. This chapter covers specification through executable code; the graph analysis itself and the solution are treated in the next chapter.
 :::
 
 ---
@@ -468,6 +468,7 @@ The division of labour is:
 | **Normalization** | Isolate the endogenous variable; generate equation variants |
 | **Python AST** | Early syntax validation and error localization |
 | **Regex/token rewriting** | Translation of ModelFlow-specific constructs |
+| **Graph analysis** | Solve order of the generated code: prolog, core, epilog and feedback set; see [Model structure and solution](modelflow_structure_and_solution.md) |
 | **Python parser/compiler** | General expression grammar and compilation |
 | **`exec`** | Execution of generated model code |
 | **Numba (optional)** | Machine-code compilation of the same generated source |
@@ -569,6 +570,7 @@ The continuation of this example—its graph edge, symbolic derivative and Jacob
 | **Equation DSL** | Compact Python-compatible economic equations |
 | **Validation** | Python AST checking against the original equation |
 | **Translation** | Regex and ModelFlow-specific token substitution |
+| **Graph analysis** | Order the normalized equations; sets the order of the generated code |
 | **Python toolchain** | General parsing, compilation and execution |
 | **Numba (optional)** | Machine-code compilation of the generated source |
 | **Runtime diagnostics** | Map execution errors back to the failing economic equation |
